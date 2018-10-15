@@ -1,0 +1,50 @@
+Private Sub list_combos(items() As Variant, r As Integer, outrange As Range)
+'receives a 1-D variant array and outputs a single column with nCr combinations
+'selecting r items without replacement... n > r > 1 :: integers
+Dim n As Integer, i As Integer, ri As Integer, outi As Long
+Dim comboindex(), comboitems()
+n = UBound(items) - LBound(items) + 1
+outi = Application.Combin(n, r)
+'test output range
+If outrange.Row + outi > 1000000 Then
+  MsgBox "Too many combinations! Will not fit in output range."
+  Exit Sub
+End If
+If Application.CountA(outrange.Resize(outi)) > 0 Then
+  MsgBox "Output range is not empty!"
+  Exit Sub
+End If
+'initialize combinations
+ReDim comboindex(1 To r)
+ReDim comboitems(1 To r)
+For ri = 1 To r
+  comboindex(ri) = LBound(items) + ri - 1 'sets comboindex's base to items' base
+  comboitems(ri) = items(comboindex(ri))
+Next ri
+ri = r
+outi = 0
+Do While comboindex(ri) <= UBound(items)
+  DoEvents
+  For i = comboindex(ri) To UBound(items)
+    comboindex(ri) = i
+    comboitems(ri) = items(comboindex(ri))
+    outrange.Offset(outi).Value2 = Join(comboitems, ";")
+    outi = outi + 1
+  Next i
+  ri = ri - 1
+  Do While comboindex(ri) + 1 = comboindex(ri + 1)
+    DoEvents
+    If ri = 1 Then Exit Do
+    ri = ri - 1
+  Loop
+  comboindex(ri) = comboindex(ri) + 1
+  comboitems(ri) = items(comboindex(ri))
+  Do While ri < r
+    DoEvents
+    ri = ri + 1
+    comboindex(ri) = comboindex(ri - 1) + 1
+    If comboindex(ri) > UBound(items) Then Exit Do
+    comboitems(ri) = items(comboindex(ri))
+  Loop
+Loop
+End Sub
