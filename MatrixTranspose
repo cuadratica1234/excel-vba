@@ -1,0 +1,13 @@
+Function MTrans(ByRef A() As Double) As Double()
+'assumes that A is a 2d double array
+Dim i As Long, j As Long
+Dim B() As Double
+ReDim B(LBound(A, 2) To UBound(A, 2), LBound(A, 1) To UBound(A, 1))
+For i = LBound(A, 1) To UBound(A, 1)
+For j = LBound(A, 2) To UBound(A, 2)
+  B(j, i) = A(i, j)
+Next
+Next
+MTrans = B()
+Erase B()
+End Function
