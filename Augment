@@ -1,0 +1,11 @@
+Public Function Augment(ByRef a() As Variant) As Variant
+'turns a 1D into a 2D array
+Dim i, n, outA()
+i = LBound(a)
+n = UBound(a)
+ReDim outA(i To n)
+For i = i To n
+  outA(1, i) = a(i)
+Next i
+Augment = outA()
+End Function
