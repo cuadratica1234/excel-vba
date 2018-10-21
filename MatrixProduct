@@ -1,0 +1,23 @@
+Function MProd(ByRef A() As Double, ByRef B() As Double) As Double()
+'Assumes that A,B are 2d double arrays
+Dim i As Long, j As Long, k As Long
+Dim C() As Double
+If UBound(B, 1) - LBound(B, 1) <> UBound(A, 2) - LBound(A, 2) Then
+  MProd = Array(Array("Not Defined!"))
+  Exit Function
+End If
+ReDim C(LBound(A, 1) To UBound(A, 1), LBound(B, 2) To UBound(B, 2))
+For i = LBound(A, 1) To UBound(A, 1)
+  For j = LBound(B, 2) To UBound(B, 2)
+    For k = LBound(A, 2) To UBound(A, 2)
+      C(i, j) = C(i, j) + A(i, k) * B(k, j)
+    Next k
+  Next j
+Next i
+'If Application.Count(C) = 1 Then
+'  MProd = C(LBound(C, 1), LBound(C, 2))
+'Else
+  MProd = C()
+'End If
+Erase C()
+End Function
